@@ -15,6 +15,16 @@ class UsuarioConta extends Model {
         return 'tb_usuario_conta'
     }
 
+    static get createdAtColumn () {
+        
+        return null
+    }
+
+    static get updatedAtColumn () {
+        
+        return null
+    }
+
     usuario () {
         return this.belongsTo('App/Models/Usuario', 'cd_usuario')
     }

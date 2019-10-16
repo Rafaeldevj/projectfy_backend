@@ -16,7 +16,11 @@ class RegistroDespesa extends Model {
     }
 
     tipoDespesa () {
-        return this.belongsTo('App/Models/TipoDespesa', 'cd_registro_despesa')
+        return this.belongsTo('App/Models/TipoDespesa', 'cd_tipo_despesa')
+    }
+
+    conta () {
+        return this.belongsTo('App/Models/Conta', 'cd_conta')
     }
 }
 

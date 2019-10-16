@@ -94,5 +94,6 @@ Route.group(() => {
 Route.group(() => {
 
   Route.get('', 'UsuarioContaController.index')
+  Route.post('', 'UsuarioContaController.store')
 
 }).prefix('/api/usuario_conta')

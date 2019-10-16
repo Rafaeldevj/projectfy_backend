@@ -1,13 +1,16 @@
 /**@type {typeof import ('@adonisjs/lucid/src/Lucid/model')} */
 const Usuario = use('App/Models/Usuario')
+
 const Encryption = use('Encryption')
 
 class UsuarioController {
   async index() {
 
-    //const usuarios = await Usuario.all();
+    const usuarios = await Usuario.all();
 
-    const usuarios =  await Usuario.query().with('contas').fetch();
+    // const usuarios =  await Usuario.query().with('contas', builder => {
+    //   builder.select(['nm_conta', 'nu_valor'])
+    // }).fetch();
 
     return usuarios;
   }
@@ -16,7 +19,12 @@ class UsuarioController {
 
     const { id } = request.params;
 
-    const usuario =  await Usuario.query().with('contas').where('cd_usuario', id).fetch();
+    const usuario =  await Usuario.query().with('contas', builder => {
+      builder.select(['nm_conta', 'nu_valor'])
+    })
+    .withCount('contas')
+    .where('cd_usuario', id).fetch()
+    
 
     for (let i = 0; i < usuario.rows[0].$relations.contas.rows.length; i++) {
       console.log(usuario.rows[0].$relations.contas.rows[i].nu_valor)
