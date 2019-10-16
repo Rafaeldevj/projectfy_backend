@@ -67,3 +67,14 @@ Route.group(() => {
   Route.post('', 'RegistroDespesaController.store')
 
 }).prefix('/api/registroDespesa')
+
+//Rotas para Conta
+Route.group(() => {
+
+  Route.get('', 'ContaController.index')
+  Route.get('/:id', 'ContaController.show')
+  Route.post('', 'ContaController.store')
+  Route.put('', 'ContaController.update')
+  Route.delete('/:id', 'ContaController.destroy')
+
+}).prefix('/api/conta')

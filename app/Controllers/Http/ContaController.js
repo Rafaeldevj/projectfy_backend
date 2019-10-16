@@ -1,92 +1,58 @@
-'use strict'
+/**@type {typeof import ('@adonisjs/lucid/src/Lucid/model')} */
+const Conta = use('App/Models/Conta')
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
-/**
- * Resourceful controller for interacting with contas
- */
 class ContaController {
-  /**
-   * Show a list of all contas.
-   * GET contas
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index() {
+
+    return await Conta.all();
   }
 
-  /**
-   * Render a form to be used for creating a new conta.
-   * GET contas/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async show({ request }) {
+
+    const { id } = request.params;
+
+    const conta = await Conta.find(id)
+
+    if (conta) {
+      
+      return conta;
+  
+    } else {
+
+      return { cod: 2, msg: 'Conta não existente' };
+    }
   }
 
-  /**
-   * Create/save a new conta.
-   * POST contas
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  async store({ request, response }) {
+
+    const data = request.body;
+
+    const conta = await Conta.create(data);
+
+    return conta;
   }
 
-  /**
-   * Display a single conta.
-   * GET contas/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async update({ request }) {
+
+    const { cd_conta, nm_conta, nu_valor } = request.body;
+
+    const conta = await Conta.find(cd_conta);
+
+    conta.nm_conta = nm_conta;
+    conta.nu_valor = nu_valor;
+
+    await conta.save();
+
+    return conta;
   }
 
-  /**
-   * Render a form to update an existing conta.
-   * GET contas/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+  async destroy({ request }) {
 
-  /**
-   * Update conta details.
-   * PUT or PATCH contas/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
+    const { id } = request.params;
 
-  /**
-   * Delete a conta with id.
-   * DELETE contas/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    const conta = await Conta.find(id)
+
+    await conta.delete()
   }
 }
 

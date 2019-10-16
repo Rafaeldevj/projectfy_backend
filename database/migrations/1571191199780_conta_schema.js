@@ -8,7 +8,7 @@ class ContaSchema extends Schema {
     this.create('tb_conta', (table) => {
       table.increments('cd_conta')
       table.string('nm_conta')
-      table.float('nu_valor')
+      table.float('nu_valor').defaultTo(0)
       table.timestamps()
     })
   }
