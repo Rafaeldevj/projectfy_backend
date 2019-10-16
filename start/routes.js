@@ -78,3 +78,21 @@ Route.group(() => {
   Route.delete('/:id', 'ContaController.destroy')
 
 }).prefix('/api/conta')
+
+//Rotas para Usário
+Route.group(() => {
+
+  Route.get('', 'UsuarioController.index')
+  Route.get('/:id', 'UsuarioController.show')
+  Route.post('', 'UsuarioController.store')
+  //Route.put('', 'UsuarioController.update')
+  //Route.delete('/:id', 'UsuarioController.destroy')
+
+}).prefix('/api/usuario')
+
+//Rotas para UsarioConta
+Route.group(() => {
+
+  Route.get('', 'UsuarioContaController.index')
+
+}).prefix('/api/usuario_conta')

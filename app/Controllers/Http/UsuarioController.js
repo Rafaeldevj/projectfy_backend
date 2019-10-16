@@ -1,92 +1,39 @@
-'use strict'
+/**@type {typeof import ('@adonisjs/lucid/src/Lucid/model')} */
+const Usuario = use('App/Models/Usuario')
+const Encryption = use('Encryption')
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
-/**
- * Resourceful controller for interacting with usuarios
- */
 class UsuarioController {
-  /**
-   * Show a list of all usuarios.
-   * GET usuarios
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index() {
+
+    //const usuarios = await Usuario.all();
+
+    const usuarios =  await Usuario.query().with('contas').fetch();
+
+    return usuarios;
   }
 
-  /**
-   * Render a form to be used for creating a new usuario.
-   * GET usuarios/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async show({ request }) {
+
+    const { id } = request.params;
+
+    const usuario =  await Usuario.query().with('contas').where('cd_usuario', id).fetch();
+
+    for (let i = 0; i < usuario.rows[0].$relations.contas.rows.length; i++) {
+      console.log(usuario.rows[0].$relations.contas.rows[i].nu_valor)
+    }
+
+    return usuario;
   }
 
-  /**
-   * Create/save a new usuario.
-   * POST usuarios
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
-  }
+  async store({ request, response }) {
 
-  /**
-   * Display a single usuario.
-   * GET usuarios/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
+    const data = request.body;
 
-  /**
-   * Render a form to update an existing usuario.
-   * GET usuarios/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+    data.nm_senha = Encryption.encrypt(data.nm_senha)
 
-  /**
-   * Update usuario details.
-   * PUT or PATCH usuarios/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
+    const usuario = await Usuario.create(data);
 
-  /**
-   * Delete a usuario with id.
-   * DELETE usuarios/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    return usuario;
   }
 }
 
